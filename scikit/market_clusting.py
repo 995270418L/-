@@ -6,10 +6,13 @@ import pandas as pd
 from sklearn import cluster, covariance, manifold
 import pymysql
 import numpy as np
+from pylab import mpl
 
 from data_save.tushare_data import stock_code_name, stock_data_by_name
 
-print(__doc__)
+# print(__doc__)
+mpl.rcParams['font.sans-serif'] = ['FangSong'] # 指定默认字体
+mpl.rcParams['axes.unicode_minus'] = False # 解决保存图像是负号'-'显示为方块的问题
 
 # obtain SH and SZ 300 stock data
 conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='root', db='finance', charset='utf8')
@@ -40,7 +43,7 @@ _, labels = cluster.affinity_propagation(edge_model.covariance_)
 n_labels = labels.max()
 
 for i in range(n_labels + 1):
-    print("Cluster {}:{} ".format((i+1), ','.join(codes[labels == i])))
+    print("Cluster {}:{} ".format((i+1), ','.join(names[names == i])))
 
 # 降维
 node_postion_model = manifold.LocallyLinearEmbedding(n_components=2, eigen_solver='dense', n_neighbors=6)
