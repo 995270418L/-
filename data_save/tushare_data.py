@@ -58,18 +58,21 @@ def saveToDB(conn, df, name):
 
 
 def get_ticket_daily(conn,tickets):
-    ts.set_token("your_token")
+    ts.set_token("91bbb2664c422fb1f20e7e8c9d952c8e8eb17dd651a5bf91bc758aea")
     pro = ts.pro_api()
     print(len(tickets))
     for index, ticket in enumerate(tickets):
         code = ticket.get("code")
         name = ticket.get("name")
-        df = pro.query('daily', ts_code=code, start_date="20180101", end_date="20190608")
+        try:
+            df = pro.query('daily', ts_code=code, start_date="20090101", end_date="20190608")
+        except:
+            time.sleep(100)
+            get_ticket_daily(conn, tickets[index:])
         saveToDB(conn, df, name)
         time.sleep(1)
         print("{} sleep over".format(index))
 
-# 返回去重后的股票编码和名字
 def stock_code_name(conn):
     cursor = conn.cursor()
     cursor.execute("select code,name from stock_daily")
@@ -78,7 +81,6 @@ def stock_code_name(conn):
     codes, names = np.array(sorted(sorted_stock_list)).T
     return names, codes
 
-# 获取指定名称的股票 DataFrame
 def stock_data_by_name(conn, name):
     cursor = conn.cursor()
     cursor.execute("select price_date, open_price, close_price from stock_daily where name=%s order by create_date desc", name)
