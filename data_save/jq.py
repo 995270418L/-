@@ -14,7 +14,15 @@ def get_csi_data(conn):
     cursor = conn.cursor()
     cursor.execute(
         "select price_date, open_price, high_price, low_price, close_price ,adj_close_price, vol, amount from stock_daily where name=%s order by price_date", '沪深300')
-    return pd.DataFrame([item for item in cursor.fetchall()], columns=["date", "open", 'high', 'low', 'close', 'adj_close', 'vol', 'amount'])
+    data = pd.DataFrame([item for item in cursor.fetchall()], columns=["date", "open", 'high', 'low', 'close', 'adj_close', 'vol', 'amount'])
+    data['open'] = pd.to_numeric(data['open'])
+    data['high'] = pd.to_numeric(data['high'])
+    data['low'] = pd.to_numeric(data['low'])
+    data['close'] = pd.to_numeric(data['close'])
+    data['adj_close'] = pd.to_numeric(data['adj_close'])
+    data['vol'] = pd.to_numeric(data['vol'])
+    data['amount'] = pd.to_numeric(data['amount'])
+    return data
 
 def save_single_data(conn, name,code):
     df = get_price(code, start_date='2005-04-08', end_date='2019-06-12', frequency='daily', fields=None, skip_paused=False, fq='pre')
