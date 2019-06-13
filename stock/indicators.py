@@ -1,9 +1,5 @@
 # stock indicators 随机森林 ann 线性模型
 import pandas as pd
-import pymysql
-import matplotlib.pyplot as plt
-from data_save.jq import get_csi_data
-
 
 def ROC(data, n):
     N = data['Close'].diff(n)

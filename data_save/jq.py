@@ -5,7 +5,7 @@ import pymysql
 import pandas as pd
 
 def login():
-    auth('jq_code', 'jq_pass')
+    auth('13121128523', '128523')
 
 def save_all_data():
     indexs = get_all_securities(types=['index'], date=None) # 获取平台支持的所有指数数据
